@@ -1,2 +1,5 @@
 # configurações do banco e da aplicação
 config.py
+
+# pasta com as imagens
+/uploads

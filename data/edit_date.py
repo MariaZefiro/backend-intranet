@@ -11,6 +11,7 @@ def save_events():
         return jsonify({"error": "Falha na conexão com o banco de dados"}), 500
     try:
         events = request.get_json()
+        print(events)
 
         if not isinstance(events, list):
             return jsonify({"error": "Dados inválidos"}), 400

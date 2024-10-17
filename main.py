@@ -22,6 +22,12 @@ from aplicativos.list_aplicativos import aplicativos_bp
 from aplicativos.add_aplicativos import add_icon_bp
 from aplicativos.delete_aplicativos import delete_icon_bp
 from users.list_users import list_users_bp
+from posts.add_post import add_post_bp
+from posts.list_post import list_post_bp
+from posts.edit_post import edit_post_bp
+from posts.delete_post import delete_post_bp
+
+
 from login import login_bp
 
 app.register_blueprint(list_date_bp, url_prefix='/api')
@@ -39,8 +45,12 @@ app.register_blueprint(aplicativos_bp, url_prefix='/api')
 app.register_blueprint(add_icon_bp, url_prefix='/api')
 app.register_blueprint(delete_icon_bp, url_prefix='/api')
 app.register_blueprint(list_users_bp, url_prefix='/api')
-app.register_blueprint(login_bp, url_prefix='/api')
+app.register_blueprint(add_post_bp, url_prefix='/api')
+app.register_blueprint(list_post_bp, url_prefix='/api')
+app.register_blueprint(edit_post_bp, url_prefix='/api')
+app.register_blueprint(delete_post_bp, url_prefix='/api')
 
+app.register_blueprint(login_bp, url_prefix='/api')
 
 
 # Rota para servir arquivos de imagem
