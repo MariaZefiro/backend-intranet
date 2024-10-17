@@ -12,6 +12,7 @@ def get_events():
         cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT * FROM datas")
         result = cursor.fetchall()
+        
         cursor.close()
         return jsonify(result), 200
     except Exception as e:
