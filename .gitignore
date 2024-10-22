@@ -3,3 +3,6 @@ config.py
 
 # pasta com as imagens
 /uploads
+
+#script AD
+script_AD.txt

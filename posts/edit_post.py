@@ -9,35 +9,43 @@ def edit_posts():
     if not conn:
         return jsonify({"error": "Falha na conexão com o banco de dados"}), 500
     try:
-        # Recebe os dados do post
         data = request.get_json()
+        post_id = data.get('id')
+        usuario_id = data.get('usuario_id')  # O usuário logado
+        action = data.get('action')  # 'like' ou 'unlike'
 
-        # Valida se 'posts' está presente e é uma lista
-        posts = data.get('posts', [])
-        if not isinstance(posts, list):
+        print(post_id)
+        print(usuario_id)
+        print(action)
+        
+        if not post_id or not usuario_id or action not in ['like', 'unlike']:
             return jsonify({"error": "Dados inválidos"}), 400
-
+        
         cursor = conn.cursor()
 
-        for post in posts:
-            post_id = post.get('id')
-            curtidas = post.get('curtidas')
+        # Verificar se o usuário já curtiu o post
+        cursor.execute("SELECT * FROM curtidas WHERE post_id = %s AND usuario_id = %s", (post_id, usuario_id))
+        curtida_existente = cursor.fetchone()
 
-            # Verifica se 'id' está presente e 'curtidas' é um número válido
-            if not post_id or not isinstance(curtidas, int):
-                return jsonify({"error": "ID ou curtidas inválidos"}), 400
-
-            # Atualiza o número de curtidas
-            sql = "UPDATE posts SET curtidas = %s WHERE id = %s"
-            cursor.execute(sql, (curtidas, post_id))
+        if action == 'like':
+            # Se o usuário ainda não curtiu, adicionar curtida
+            if not curtida_existente:
+                cursor.execute("INSERT INTO curtidas (post_id, usuario_id) VALUES (%s, %s)", (post_id, usuario_id))
+                cursor.execute("UPDATE posts SET curtidas = curtidas + 1 WHERE id = %s", (post_id,))
+        elif action == 'unlike':
+            # Se já curtiu, remover curtida
+            if curtida_existente:
+                cursor.execute("DELETE FROM curtidas WHERE post_id = %s AND usuario_id = %s", (post_id, usuario_id))
+                cursor.execute("UPDATE posts SET curtidas = curtidas - 1 WHERE id = %s", (post_id,))
 
         conn.commit()
         cursor.close()
-        return jsonify({"message": "Posts salvos com sucesso"}), 200
+
+        return jsonify({"message": "Ação realizada com sucesso"}), 200
 
     except Exception as e:
-        print(f"Erro ao salvar posts: {e}")
+        print(f"Erro ao atualizar curtidas: {e}")
         conn.rollback()
-        return jsonify({"error": "Erro ao salvar posts"}), 500
+        return jsonify({"error": "Erro ao atualizar curtidas"}), 500
     finally:
         close_connection(conn)

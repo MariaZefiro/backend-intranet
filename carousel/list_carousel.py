@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify
 from db import get_connection, close_connection
+import os
 
 list_carousel_bp = Blueprint('list_carousel', __name__)
 

@@ -6,6 +6,8 @@ import os
 app = Flask(__name__)
 CORS(app)
 
+app.secret_key = "sJG3u3Cx6hMa1wbW"
+
 # Registrar Blueprints após a criação do app
 from data.list_date import list_date_bp
 from data.edit_date import edit_date_bp
@@ -22,11 +24,12 @@ from aplicativos.list_aplicativos import aplicativos_bp
 from aplicativos.add_aplicativos import add_icon_bp
 from aplicativos.delete_aplicativos import delete_icon_bp
 from users.list_users import list_users_bp
+from users.get_user import get_users_bp
 from posts.add_post import add_post_bp
 from posts.list_post import list_post_bp
+from posts.list_post import check_like_status
 from posts.edit_post import edit_post_bp
 from posts.delete_post import delete_post_bp
-
 
 from login import login_bp
 
@@ -49,9 +52,9 @@ app.register_blueprint(add_post_bp, url_prefix='/api')
 app.register_blueprint(list_post_bp, url_prefix='/api')
 app.register_blueprint(edit_post_bp, url_prefix='/api')
 app.register_blueprint(delete_post_bp, url_prefix='/api')
+app.register_blueprint(get_users_bp, url_prefix='/api')
 
 app.register_blueprint(login_bp, url_prefix='/api')
-
 
 # Rota para servir arquivos de imagem
 @app.route('/uploads/<path:filename>')
