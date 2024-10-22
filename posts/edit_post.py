@@ -13,10 +13,6 @@ def edit_posts():
         post_id = data.get('id')
         usuario_id = data.get('usuario_id')  # O usuário logado
         action = data.get('action')  # 'like' ou 'unlike'
-
-        print(post_id)
-        print(usuario_id)
-        print(action)
         
         if not post_id or not usuario_id or action not in ['like', 'unlike']:
             return jsonify({"error": "Dados inválidos"}), 400

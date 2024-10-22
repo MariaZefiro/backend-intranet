@@ -50,7 +50,11 @@ def delete_post(post_id):
                 query_delete_image = "DELETE FROM imagens WHERE id = %s"
                 cursor.execute(query_delete_image, (image_id,))
 
-        # 4. Excluir o post
+        # 4. Excluir as curtidas associadas ao post
+        query_delete_likes = "DELETE FROM curtidas WHERE post_id = %s"
+        cursor.execute(query_delete_likes, (post_id,))
+
+        # 5. Excluir o post
         query_delete_post = "DELETE FROM posts WHERE id = %s"
         cursor.execute(query_delete_post, (post_id,))
 
